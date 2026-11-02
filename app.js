@@ -2,17 +2,33 @@ let input = document.querySelector("#inputt");
 let button = document.querySelector("#btn");
 let OrderList =document.querySelector("#list");
 
+let CurrentSpan = null;
+var ArrayTask = [];
+
 button.addEventListener("click" , () =>{
     let value = input.value;
 
 if(value === ""){
-    alert("please write somthing")
-}else{
- let li = document.createElement("li");
-    li.className = "list-group-item d-flex justify-content-between align-items-center py-3 mb-2 border rounded-3 shadow-sm"
+    alert("please write somthing");
+    return;
+}
+if(CurrentSpan  !== null){
+  CurrentSpan.innerHTML = value;
+  CurrentSpan = null;
+  button.innerHTML = "Add";
+  input.value = "";
+  return;
+}
 
-     li.innerHTML = `<span>${value}</span><button class=""  id="edt-btn" >Edit</button>
-    <button  class = ""  id="dlt-btn" >Delete</button>`
+ArrayTask.push(value);
+
+localStorage.setItem("MyTask" , JSON.stringify(ArrayTask));
+
+
+ let li = document.createElement("li");
+     li.innerHTML = `<span>${value}</span>
+                     <button  id="edt-btn" >Edit</button>
+                     <button id="dlt-btn" >Delete</button>`
 
 let dltBtn = li.querySelector("#dlt-btn");
 dltBtn.addEventListener("click" ,() =>{
@@ -21,30 +37,32 @@ dltBtn.addEventListener("click" ,() =>{
 let EditBtn = li.querySelector("#edt-btn");
 EditBtn.addEventListener("click" , () => {
   let span = li.querySelector("span");
-  let update = prompt("Edit your task " , span.innerHTML);
-  if(update !== null  && update !== ""){
-    span.innerHTML = update
-  }
+  input.value = span.innerHTML;
+  CurrentSpan =  span;
+  button.innerHTML =" update";
+  input.focus()
+
+  //let update = prompt("Edit your task " , span.innerHTML);
+  // if(update !== null  && update !== ""){
+  //   span.innerHTML = update
+  // }
 
 });
 OrderList.appendChild(li);
 
 input.value = "";
-}
+
 });
 
 
 
 
 //saving  data  in  local storage
-// var ArrayTask = [];
+
 // button.addEventListener("click" , () =>{
 // var  val  = input.value;
 // if(val !== ""){
-//   ArrayTask.push(val);}
-
-// localStorage.setItem("MyTask" , JSON.stringify(ArrayTask));
-
+  
 // localStorage.getItem("MyTask" ,JSON.parse(ArrayTask));
 
 // console.log(ArrayTask);
